@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APKMODDERKING</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-light: #f7f8fa;
+      --bg-dark: #121417;
+      --card-light: #f0f2f5;
+      --card-dark: #1e1e24;
+      --text-light: #111827;
+      --text-dark: #f3f4f6;
+      --muted-light: #6b7280;
+      --muted-dark: #9ca3af;
+      --primary: #3b82f6;
+      --accent: #e0e7ff;
+    }body.light {
+  background-color: var(--bg-light);
+  color: var(--text-light);
+}
+
+body.dark {
+  background-color: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+}
+
+.container {
+  width: 100%;
+  max-width: 360px;
+  margin: 40px 16px;
+}
+
+.toggle-mode {
+  text-align: right;
+  margin-bottom: 12px;
+}
+
+.toggle-mode button {
+  background: var(--primary);
+  border: none;
+  padding: 6px 12px;
+  color: white;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.box {
+  background-color: var(--card-light);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+body.dark .box {
+  background-color: var(--card-dark);
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+input, button {
+  width: 100%;
+  padding: 14px;
+  font-size: 15px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  border: none;
+  font-family: 'Inter', sans-serif;
+}
+
+input {
+  background: #e5e7eb;
+  color: #111;
+}
+
+body.dark input {
+  background: #2c2f36;
+  color: white;
+}
+
+input:focus {
+  outline: 2px solid var(--primary);
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.error {
+  background: #fee2e2;
+  color: #b91c1c;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  text-align: center;
+  display: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: var(--accent);
+  border-radius: 14px;
+  padding: 16px;
+  text-align: center;
+}
+
+body.dark .card {
+  background: #2a2e39;
+}
+
+.label {
+  font-size: 13px;
+  color: var(--muted-light);
+}
+
+body.dark .label {
+  color: var(--muted-dark);
+}
+
+.value {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: 4px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+th {
+  color: var(--primary);
+}
+
+.history-container {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+  </style>
+</head>
+<body class="light">
+  <div class="container">
+    <div class="toggle-mode">
+      <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
+    </div><div class="box active" id="loginBox">
+  <div class="title" onclick="window.open('https://telegram.me/apkmodderking', '_blank')">
+    <i class="fab fa-telegram"></i> APKMODDERKING
+  </div>
+  <input type="password" id="loginKey" placeholder="Enter Access Key">
+  <div class="error" id="errorBox">Wrong key! Try again.</div>
+  <button onclick="checkLogin()">Login</button>
+</div>
+
+<div class="box" id="appBox">
+  <div class="title">
+    <i class="fab fa-telegram"></i> APKMODDERKING
+  </div>
+  <div class="grid">
+    <div class="card">
+      <div class="label">Issue Number</div>
+      <div class="value" id="issueNumber">---</div>
+    </div>
+    <div class="card">
+      <div class="label">Time Left</div>
+      <div class="value" id="timer">--:--</div>
+    </div>
+    <div class="card">
+      <div class="label">Predicted Number</div>
+      <div class="value" id="predictedNumber">-</div>
+    </div>
+    <div class="card">
+      <div class="label">Result</div>
+      <div class="value" id="resultType">-</div>
+    </div>
+  </div>
+  <div class="card history-container">
+    <div class="label">History</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Issue</th>
+          <th>Number</th>
+          <th>Result</th>
+        </tr>
+      </thead>
+      <tbody id="historyTable"></tbody>
+    </table>
+  </div>
+</div>
+
+  </div>  <script>
+    const CORRECT_KEY = "trp";
+
+    function toggleDarkMode() {
+      const body = document.body;
+      body.classList.toggle("dark");
+      body.classList.toggle("light");
+    }
+
+    function checkLogin() {
+  const key = document.getElementById("loginKey").value.trim();
+  const errorBox = document.getElementById("errorBox");
+  const loginBox = document.getElementById("loginBox");
+  const appBox = document.getElementById("appBox");
+
+  if (key === CORRECT_KEY) {
+    loginBox.style.display = "none";
+    appBox.classList.add("active");
+    if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+    initApp();
+        document.getElementById("loginBox").classList.remove("active");
+        document.getElementById("appBox").classList.add("active");
+        initApp();
+      } else {
+    errorBox.style.display = "block";
+    setTimeout(() => errorBox.style.display = "none", 2500);
+    if (navigator.vibrate) navigator.vibrate([200]);
+      }
+    }
+
+    function generatePeriod() {
+      let now = new Date();
+      let utc = new Date(now.getTime() + now.getTimezoneOffset() * 60000);
+      let y = utc.getFullYear();
+      let m = String(utc.getMonth() + 1).padStart(2, '0');
+      let d = String(utc.getDate()).padStart(2, '0');
+      let mins = utc.getHours() * 60 + utc.getMinutes();
+      return `${y}${m}${d}${10000 + mins}`;
+    }
+
+    function getRandomResult() {
+      let number = Math.floor(Math.random() * 10);
+      return {
+        number,
+        type: number >= 5 ? "BIG" : "SMALL"
+      };
+    }
+
+    function initApp() {
+      updateData();
+      setInterval(updateData, 1000);
+      setInterval(updateTimer, 1000);
+    }
+
+    let currentIssue = "";
+
+    function updateData() {
+      let issue = generatePeriod();
+      if (issue !== currentIssue) {
+        currentIssue = issue;
+        document.getElementById("issueNumber").textContent = issue;
+
+        let { number, type } = getRandomResult();
+        document.getElementById("predictedNumber").textContent = number;
+        document.getElementById("resultType").textContent = type;
+
+        let row = `<tr><td>${issue}</td><td>${number}</td><td>${type}</td></tr>`;
+        document.getElementById("historyTable").innerHTML = row + document.getElementById("historyTable").innerHTML;
+      }
+    }
+
+    function updateTimer() {
+      let now = new Date();
+      let sec = now.getSeconds();
+      let remaining = 60 - sec;
+      document.getElementById("timer").textContent = `00:${String(remaining).padStart(2, '0')}`;
+    }
+  </script></body>
+</html>
